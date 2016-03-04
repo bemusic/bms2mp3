@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'tmpdir'
 require 'digest'
 require 'json'
@@ -45,11 +47,11 @@ def get_mp3_name(attrs)
 end
 
 mp3dir = ENV['MP3DIR'] || 'mp3'
+tempdir = ENV['TEMP'] || nil
 
 FileUtils.mkdir_p(mp3dir)
 
-                         # XXX: remove
-Dir.mktmpdir 'bms2song', '/Volumes/RAMDisk/' do |dir|
+Dir.mktmpdir 'bms2song', tempdir do |dir|
   bms_files(ARGV[0], temp: dir).sort_by { |x| x.scan(/h/i).length }.reverse.take(1).each do |file|
     tmpfile = File.join(dir, File.basename(file))
     md5 = Digest::MD5.file(file).hexdigest
